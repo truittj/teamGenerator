@@ -12,7 +12,23 @@ const render = require("./lib/htmlRenderer");
 const employeeArray =[];
 
 //1. ask for name, email, role
-
+function userPrompt () {
+    return inquirer.prompt([
+        {
+            type: "input",
+            message: "Employee Name",
+            name: "name"
+        },
+        {
+            type: "input",
+            message: "Employee Email",
+            name: "email"
+        },
+        {
+            type: "input",
+            message: "Employee Role",
+            name: "role"
+        },
 //if role == intern
     //ask for school
     //ask if there is another employee? yes or no
