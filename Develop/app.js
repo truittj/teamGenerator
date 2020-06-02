@@ -4,36 +4,54 @@ const Intern = require("./lib/Intern");
 const inquirer = require("inquirer");
 const path = require("path");
 const fs = require("fs");
+const util = require("util");  
+
 
 const OUTPUT_DIR = path.resolve(__dirname, "output");
 const outputPath = path.join(OUTPUT_DIR, "team.html");
 
 const render = require("./lib/htmlRenderer");
+
+//const writeFileAsync = util.promisify(fs.writeFile);
+
 const employeeArray =[];
 
 //1. ask for name, email, role
-function userPrompt () {
-    return inquirer.prompt([
+
+function addMember () {
+    inquirer.prompt([
         {
             type: "input",
             message: "Employee Name",
             name: "name"
         },
+
         {
             type: "input",
             message: "Employee Email",
             name: "email"
         },
+
         {
             type: "input",
-            message: "Employee Role",
-            name: "role"
+            message: "Employee ID",
+            name: "id"
         },
+
+        {
+            type: "list",
+            message: "Employee Role",
+            choices: ["Manager", "Employee", "Intern"],
+            name: "role",
+        },
+        ])
+    };
+        
 //if role == intern
     //ask for school
     //ask if there is another employee? yes or no
         //create intern passing in name email role and school
-        //then stuff the intern into the employeearrat
+        //then stuff the intern into the employeearray
             //if yes
                 //ask for name email and role
             //if no 
