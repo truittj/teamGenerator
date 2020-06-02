@@ -41,10 +41,49 @@ function addMember () {
         {
             type: "list",
             message: "Employee Role",
-            choices: ["Manager", "Employee", "Intern"],
+            choices: ["Manager", "Engineer", "Intern"],
             name: "role",
         },
         ])
+    .then function ({name, email, id, role}) {
+        let roleType = "";
+        if (role === "Engineer") {
+            roleType = "GitHub username";
+            } else if (role === "Intern") {
+                roleType = "school name";
+            } else {
+                roleType = "office phone number";
+            };
+            inquirer.prompt ([
+                {
+                type: "input",
+                message: `Enter ${"roleType"}`,
+                name: "roleType",
+                },
+                {
+                type: "checkbox",
+                message: "Would you like to add another employee",
+                choices: ["Yes", "No"],
+                name: "another",
+                }, 
+            ])
+                .then function ({roleType, another}) {
+                    let newEmployee;
+                    if (role === "Engineer") {
+                        newEmployee = new Engineer (name, email id, roleType);
+                    }
+                    else if (role === "Intern") {
+                        newEmployee = new Intern (name, email, id, roleType);
+                    } 
+                    else {
+                        newEmployee = new Manager (name, email, id, roleType);
+                    }
+                    employeeArray.push(newEmployee);
+                    addToHTML (newEmployee)
+                    
+                    }
+                }
+        }
     };
         
 //if role == intern
