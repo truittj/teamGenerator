@@ -12,15 +12,21 @@ const outputPath = path.join(OUTPUT_DIR, "team.html");
 
 const render = require("./lib/htmlRenderer");
 
-//const writeFileAsync = util.promisify(fs.writeFile);
 
-const employeeArray =[];
+const employeeArray =[1, 2, 3 ];
  
-function init () {
-     addEmployee();
-     baseHTML();
-};
+
 //1. ask for name, email, role
+function rereun () {
+    inquirer.prompt ([
+    {
+    type: "checkbox",
+    message: "Would you like to add another employee",
+    choices: ["Yes", "No"],
+    name: "another",
+    }
+    ])};
+
 
 function addEmployee () {
     inquirer.prompt([
@@ -47,173 +53,73 @@ function addEmployee () {
             message: "Employee Role",
             choices: ["Manager", "Engineer", "Intern"],
             name: "role",
+            default: "Engineer"
         },
         ])
-    .then (function ({name, email, id, role}) {
-        let roleType = "";
-        if (role === "Engineer") {
-            roleType = "GitHub username";
-            } else if (role === "Intern") {
-                roleType = "school name";
-            } else {
-                roleType = "office phone number";
-            };
+    .then (function (answers) {
+        if (answers.role === "Engineer") {
             inquirer.prompt ([
                 {
                 type: "input",
-                message: `Enter ${"roleType"}`,
-                name: "roleType",
-                },
-                {
-                type: "checkbox",
-                message: "Would you like to add another employee",
-                choices: ["Yes", "No"],
-                name: "another",
-                }, 
-            ])
-                .then (function ({roleType, another}) {
-                    let newEmployee;
-                    if (role === "Engineer") {
-                        newEmployee = new Engineer (name, email, id, roleType);
+                message: "Enter Github User Name",
+                name: "github",
+                }])
+                .then ((answer) => {
+                    
+                    class Engineers extends Engineer {
+                        constructor (role, github)
+                        super (name, email, id)
                     }
-                    else if (role === "Intern") {
-                        newEmployee = new Intern (name, email, id, roleType);
-                    } 
-                    else {
-                        newEmployee = new Manager (name, email, id, roleType);
-                    }
-                    employeeArray.push(newEmployee);
-                    addToHTML (newEmployee)
-                    .then (function(){
-                        if (another === "Yes") {
-                            addEmployee();
-                        } else {
-                            renderHTML ();
-                        }
-                        })
-                    }
-                )}
-    )};
-
-function baseHTML () {
-    `<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>My Team</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <link rel="stylesheet" href="style.css">
-    <script src="https://kit.fontawesome.com/c502137733.js"></script>
-</head>
-
-<body>
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-12 jumbotron mb-3 team-heading">
-                <h1 class="text-center">My Team</h1>
-            </div>
-        </div>
-    </div>
-    <div class="container">
-        <div class="row">
-            <div class="team-area col-12 d-flex justify-content-center">`
-                fs.writeFile("./output/team.html", html, function(err) {
-                    if (err) {
-                        throw err;
-                    }
-                });
-    console.log ("Begin Write");
-};
-
-function addToHTML (employee) {
-    return new Promise (function(resolve, reject) {
-        const name = employee.getName ();
-        const email = employee.getEmail ();
-        const id = employee.getId ();
-        const role = employee.getRole ();
-        let data = "";
-        if (role === "Engineer") {
-            const gitHub = employee.getGitHub();
-            data = `<div class="card employee-card">
-            <div class="card-header">
-                <h2 class="card-title">${name}</h2>
-                <h3 class="card-title"><i class="fas fa-glasses mr-2"></i>${role}</h3>
-            </div>
-            <div class="card-body">
-                <ul class="list-group">
-                    <li class="list-group-item">ID: ${id}</li>
-                    <li class="list-group-item">Email: <a href="mailto:${email}">${email}</a></li>
-                    <li class="list-group-item">GitHub: <a href="https://github.com/${gitHub}" target="_blank" rel="noopener noreferrer">${gitHub}</a></li>
-                </ul>
-            </div>
-        </div>`;
-        } else if (role === "Intern") {
-        const school = employee.getSchool();
-        data = 
-        `<div class="card employee-card">
-        <div class="card-header">
-            <h2 class="card-title">${name}</h2>
-            <h3 class="card-title"><i class="fas fa-user-graduate mr-2"></i>${role}</h3>
-        </div>
-        <div class="card-body">
-            <ul class="list-group">
-                <li class="list-group-item">ID: ${id}</li>
-                <li class="list-group-item">Email: <a href="mailto:${email}">${email}</a></li>
-                <li class="list-group-item">School: ${school}</li>
-            </ul>
-        </div>
-    </div>`;
-        } else {
-        const officeNumber = employee.getOfficePhoneNumber ();
-        data = 
-        `<div class="card employee-card">
-    <div class="card-header">
-        <h2 class="card-title">${name}</h2>
-        <h3 class="card-title"><i class="fas fa-mug-hot mr-2"></i>${role}</h3>
-    </div>
-    <div class="card-body">
-        <ul class="list-group">
-            <li class="list-group-item">ID: ${id}</li>
-            <li class="list-group-item">Email: <a href="mailto:${email}">${email}</a></li>
-            <li class="list-group-item">Office number: ${officeNumber}</li>
-        </ul>
-    </div>
-</div>`;
-        }
-        console.log ("adding employee");
-        fs.appendFile("./output/team.html", data, function(err) {
-            if (err){
-            return reject(err)
-            } else {
-                return resolve ()}
-        })
-    } 
-    )};
-        
-
-    function renderHTML () {
-        const html = 
-        
-        `</div>
-        </div>
-    </div>
-</body>
-
-</html>`;
-        fs.appendFile("./output/team.html", html, function (err)
-        {
-            if (err) {
-                console.log ("error");
+                   const engineer = new Engineers (answers.role, answer.github, answers.name, answers.email, answers.id)
+                    //let engineerArr = employeeArray.map((() => engineer));
+                    
+                    
+                    console.log(engineer);
+                })
+            } else if (answers.role === "Intern") {
+                inquirer.prompt ([
+                    {
+                    type: "input",
+                    message: "Where are you going to school",
+                    name: "school",
+                }])
+                .then ((answer) => {
+                    const intern = new Intern (answers.name, answers.email, answers.id, answer.school)
+                    console.log(intern);
+                })
+            } else if (answers.role === "Manager") {
+                inquirer.prompt ([
+                    {
+                    type: "input",
+                    message: "Enter office phone number",
+                    name: "officeNumber",
+                }])
+                .then ((answer) => {
+                    const manager = new Manager (answers.name, answers.email, answers.id, answer.officeNumber, answers.role,)
+                    console.log(manager);
+                })
+                    };
+                
+                })
             };
-        });
-        console.log ("Done")
-    };
+    //             
 
-    init ();
+    //                 employeeArray.push(answers);
+    //                 .then (function(){
+    //                     rereun ()
+    //                     if (another === "Yes") {
+    //                         addEmployee();
+    //                     } else {
+    //                         renderHTML ();
+    //                     }
+    //                     })
+    //                 }
+    //             )}
+    // )};
+
+
+    addEmployee ()
+
 //if role == intern
     //ask for school
     //ask if there is another employee? yes or no
