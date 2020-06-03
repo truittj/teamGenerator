@@ -12,10 +12,8 @@ const outputPath = path.join(OUTPUT_DIR, "team.html");
 
 const render = require("./lib/htmlRenderer");
 
-fs.writeFile
-
 const employeeArray =[];
- 
+
 
 function rerun () {
     inquirer.prompt ([
@@ -30,10 +28,18 @@ function rerun () {
     if (answer.another === "Yes") {
         addEmployee()
     } else {
-        return
-    }
-})
-};
+        var createHTML = render(employeeArray)
+        console.log(createHTML);
+        //.then((createHTML) => {fs.writeFile(outputPath, createHTML, function(err) {
+            
+            if (err) {
+              return console.log(err);
+            }
+          
+            console.log("Success!");
+          
+          }});
+    };
 
 //1. ask for name, email, role
 
@@ -75,11 +81,8 @@ function addEmployee () {
                 }])
                 .then ((answer) => {
                     console.log(answer);
-                    const engineer = new Engineer (answers.name, answers.email, answers.id, answer.github, answers.role)
-                    
-                    const engineerArray =[{role: "engineer"}];
-                    engineerArray.push(engineer);
-                    employeeArray.push(engineerArray);
+                    const engineer = new Engineer (answers.name, answers.email, answers.id, answer.github)
+                    employeeArray.push(engineer);
                     rerun()
                     console.log(employeeArray);
                 })
@@ -92,9 +95,8 @@ function addEmployee () {
                 }])
                 .then ((answer) => {
                     const intern = new Intern (answers.name, answers.email, answers.id, answer.school)
-                    const internArray =[{role: "intern"}];
-                    internArray.push(intern);
-                    employeeArray.push(internArray);
+
+                    employeeArray.push(intern);
                     rerun()
                     console.log(employeeArray);
                 })
@@ -107,10 +109,8 @@ function addEmployee () {
                 }])
                 .then ((answer) => {
                     const manager = new Manager (answers.name, answers.email, answers.id, answer.officeNumber, answers.role,)
-                    
-                    const managerArray =[{role: "manager"}];
-                    managerArray.push(manager);
-                    employeeArray.push(managerArray);
+
+                    employeeArray.push(manager);
                     rerun()
                     console.log(employeeArray);
                 })
@@ -121,7 +121,9 @@ function addEmployee () {
             };
 
 
-    addEmployee ()
+            addEmployee ();
+
+           
 
 //if role == intern
     //ask for school
