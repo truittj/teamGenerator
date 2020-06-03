@@ -29,7 +29,6 @@ function rerun () {
         addEmployee()
     } else {
             var createHTML = render(employeeArray)
-            console.log(createHTML);
             fs.writeFile(outputPath, createHTML, function(err) {
             
             if (err) {
