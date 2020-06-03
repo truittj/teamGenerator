@@ -12,21 +12,30 @@ const outputPath = path.join(OUTPUT_DIR, "team.html");
 
 const render = require("./lib/htmlRenderer");
 
+fs.writeFile
 
-const employeeArray =[1, 2, 3 ];
+const employeeArray =[];
  
 
-//1. ask for name, email, role
-function rereun () {
+function rerun () {
     inquirer.prompt ([
     {
-    type: "checkbox",
+    type: "list",
     message: "Would you like to add another employee",
     choices: ["Yes", "No"],
     name: "another",
     }
-    ])};
+    ])
+.then(function (answer) {
+    if (answer.another === "Yes") {
+        addEmployee()
+    } else {
+        return
+    }
+})
+};
 
+//1. ask for name, email, role
 
 function addEmployee () {
     inquirer.prompt([
@@ -65,12 +74,14 @@ function addEmployee () {
                 name: "github",
                 }])
                 .then ((answer) => {
-                    const engineer = new Engineer (answers.name, answers.email, answers.id, answer.github,)
+                    console.log(answer);
+                    const engineer = new Engineer (answers.name, answers.email, answers.id, answer.github, answers.role)
                     
-                    //let engineerArr = employeeArray.map((() => engineer));
-                    
-                    
-                    console.log(engineer);
+                    const engineerArray =[{role: "engineer"}];
+                    engineerArray.push(engineer);
+                    employeeArray.push(engineerArray);
+                    rerun()
+                    console.log(employeeArray);
                 })
             } else if (answers.role === "Intern") {
                 inquirer.prompt ([
@@ -81,7 +92,11 @@ function addEmployee () {
                 }])
                 .then ((answer) => {
                     const intern = new Intern (answers.name, answers.email, answers.id, answer.school)
-                    console.log(intern);
+                    const internArray =[{role: "intern"}];
+                    internArray.push(intern);
+                    employeeArray.push(internArray);
+                    rerun()
+                    console.log(employeeArray);
                 })
             } else if (answers.role === "Manager") {
                 inquirer.prompt ([
@@ -92,26 +107,18 @@ function addEmployee () {
                 }])
                 .then ((answer) => {
                     const manager = new Manager (answers.name, answers.email, answers.id, answer.officeNumber, answers.role,)
-                    console.log(manager);
+                    
+                    const managerArray =[{role: "manager"}];
+                    managerArray.push(manager);
+                    employeeArray.push(managerArray);
+                    rerun()
+                    console.log(employeeArray);
                 })
                     };
-                
+                    
                 })
+                
             };
-    //             
-
-    //                 employeeArray.push(answers);
-    //                 .then (function(){
-    //                     rereun ()
-    //                     if (another === "Yes") {
-    //                         addEmployee();
-    //                     } else {
-    //                         renderHTML ();
-    //                     }
-    //                     })
-    //                 }
-    //             )}
-    // )};
 
 
     addEmployee ()
