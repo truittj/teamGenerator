@@ -65,12 +65,8 @@ function addEmployee () {
                 name: "github",
                 }])
                 .then ((answer) => {
+                    const engineer = new Engineer (answers.name, answers.email, answers.id, answer.github,)
                     
-                    class Engineers extends Engineer {
-                        constructor (role, github)
-                        super (name, email, id)
-                    }
-                   const engineer = new Engineers (answers.role, answer.github, answers.name, answers.email, answers.id)
                     //let engineerArr = employeeArray.map((() => engineer));
                     
                     
