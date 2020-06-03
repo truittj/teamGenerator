@@ -30,7 +30,7 @@ function rerun () {
     } else {
             var createHTML = render(employeeArray)
             console.log(createHTML);
-            (createHTML) => {fs.appendFile(outputPath, createHTML, function(err) {
+            fs.writeFile(outputPath, createHTML, function(err) {
             
             if (err) {
               return console.log(err);
@@ -38,7 +38,7 @@ function rerun () {
           
             console.log("Success!");
           
-          })}}})};
+          })}})};
 
 //1. ask for name, email, role
 
